@@ -6,4 +6,9 @@
         android:layout_height="match_parent"
         tools:context=".Activities.PreviewActivity">
 
+    <com.google.ar.sceneform.SceneView
+            android:id="@+id/scene_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
