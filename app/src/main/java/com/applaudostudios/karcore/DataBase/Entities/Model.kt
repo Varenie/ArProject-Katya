@@ -10,8 +10,10 @@ data class Model(
     val id: Int? = null,
     @ColumnInfo(name = "model_name")
     val modelName: String,
-    @ColumnInfo(name = "model_uri")
-    val modelUri: String,
+    @ColumnInfo(name = "is_favourite")
+    val isFavourite: Boolean,
+    @ColumnInfo(name = "model_url")
+    val modelUrl: String,
     @ColumnInfo(name = "photo_uri")
     val photoUri: String
 )

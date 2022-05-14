@@ -13,6 +13,7 @@ import com.applaudostudios.karcore.DataBase.AppDatabase
 import com.applaudostudios.karcore.DataBase.Dao.ModelDao
 import com.applaudostudios.karcore.DataBase.Entities.Model
 import com.applaudostudios.karcore.R
+import com.applaudostudios.karcore.Singleton
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 
@@ -26,8 +27,6 @@ class MainActivity : AppCompatActivity() {
     private var db: AppDatabase? = null
     private var modelDao: ModelDao? = null
 
-    val modelList = MutableLiveData<List<Model>?>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,7 +36,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setObservables(){
-        modelList.observe(this) {
+        Singleton.modelList.observe(this) {
+            setRecycler()
+        }
+
+        Singleton.isFavouriteFlag.observe(this) {
+            getValueForList()
             setRecycler()
         }
     }
@@ -48,13 +52,15 @@ class MainActivity : AppCompatActivity() {
 
         val lamp = Model(
             modelName = "Lamp",
-            modelUri = Uri.parse("LampPost.sfb").toString(),
+            isFavourite = false,
+            modelUrl = Uri.parse("LampPost.sfb").toString(),
             photoUri = R.drawable.lamp_thumb.toString()
         )
 
         val table = Model(
             modelName = "Table",
-            modelUri = Uri.parse("model.sfb").toString(),
+            isFavourite = false,
+            modelUrl = Uri.parse("model.sfb").toString(),
             photoUri = R.drawable.smalltable.toString()
         )
 
@@ -65,21 +71,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        modelList.postValue(db?.modelDao()?.getModels())
+        getValueForList()
     }
 
     private fun setRecycler() {
-        modelList.value?.let {
+        Singleton.modelList.value?.let {
+            Log.e("MYCHECK", it.toString())
             val recycler = findViewById<RecyclerView>(R.id.my_recycler)
 
             recycler.layoutManager = LinearLayoutManager(this)
             recycler.setHasFixedSize(true)
 
-            recycler.adapter = RecyclerAdapter(it, this)
+            recycler.adapter = RecyclerAdapter(it, this, modelDao)
 
         }
     }
 
-
+    private fun getValueForList() = GlobalScope.launch{
+        Singleton.modelList.postValue(modelDao?.getModels())
+    }
 
 }

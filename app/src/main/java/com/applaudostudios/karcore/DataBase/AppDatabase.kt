@@ -9,7 +9,7 @@ import com.applaudostudios.karcore.DataBase.Entities.Model
 
 @Database(
     entities = [Model::class],
-    version = 1)
+    version = 3)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun modelDao(): ModelDao
 
@@ -19,7 +19,9 @@ abstract class AppDatabase: RoomDatabase() {
         fun getAppDataBase(context: Context): AppDatabase? {
             if (INSTANCE == null){
                 synchronized(AppDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "myDB").build()
+                    INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "myDB")
+                        .fallbackToDestructiveMigration()
+                        .build()
                 }
             }
 

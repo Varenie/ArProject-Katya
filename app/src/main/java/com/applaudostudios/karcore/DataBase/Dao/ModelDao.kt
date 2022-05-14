@@ -18,6 +18,9 @@ interface ModelDao {
     @Query("SELECT * FROM Model")
     fun getModels(): List<Model>
 
+    @Query("SELECT * FROM Model WHERE is_favourite == 'TRUE'")
+    fun getFavouriteModels(): List<Model>
+
     @Query("DELETE FROM Model WHERE id < 5")
     fun deleteAll()
 }
