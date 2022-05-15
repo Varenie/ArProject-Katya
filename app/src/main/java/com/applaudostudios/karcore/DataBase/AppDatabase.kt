@@ -9,7 +9,7 @@ import com.applaudostudios.karcore.DataBase.Entities.Model
 
 @Database(
     entities = [Model::class],
-    version = 3)
+    version = 4)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun modelDao(): ModelDao
 

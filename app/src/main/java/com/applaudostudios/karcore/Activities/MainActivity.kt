@@ -50,33 +50,11 @@ class MainActivity : AppCompatActivity() {
         db = AppDatabase.getAppDataBase(this@MainActivity)
         modelDao = db?.modelDao()
 
-        val lamp = Model(
-            modelName = "Lamp",
-            isFavourite = false,
-            modelUrl = Uri.parse("LampPost.sfb").toString(),
-            photoUri = R.drawable.lamp_thumb.toString()
-        )
-
-        val table = Model(
-            modelName = "Table",
-            isFavourite = false,
-            modelUrl = Uri.parse("model.sfb").toString(),
-            photoUri = R.drawable.smalltable.toString()
-        )
-
-        with(modelDao) {
-            if (this?.getModels()?.size!! == 0) {
-                this.insertModel(lamp)
-                this.insertModel(table)
-            }
-        }
-
         getValueForList()
     }
 
     private fun setRecycler() {
         Singleton.modelList.value?.let {
-            Log.e("MYCHECK", it.toString())
             val recycler = findViewById<RecyclerView>(R.id.my_recycler)
 
             recycler.layoutManager = LinearLayoutManager(this)

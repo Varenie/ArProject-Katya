@@ -2,6 +2,7 @@ package com.applaudostudios.karcore.Adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,9 +45,10 @@ class RecyclerAdapter(
         }
 
         fun bind(model: Model) {
-            photo.setImageDrawable(ContextCompat.getDrawable(context.applicationContext, model.photoUri.toInt()))
+            val bmp = BitmapFactory.decodeByteArray(model.photo, 0, model.photo.size)
+            photo.setImageBitmap(bmp)
             name.text = model.modelName
-            desc.text = "${model.modelUrl}\n${model.photoUri}"
+            desc.text = model.description
 
             if (model.isFavourite) {
                 favourite.setImageResource(R.drawable.ic_favorite_fill)
@@ -58,8 +60,9 @@ class RecyclerAdapter(
                         id = model.id,
                         modelName = model.modelName,
                         isFavourite = false,
+                        description = model.description,
                         modelUrl = model.modelUrl,
-                        photoUri = model.photoUri
+                        photo = model.photo
                     )
                     updateFavourite(mModel)
                     Singleton.isFavouriteFlag.value = false
@@ -70,8 +73,9 @@ class RecyclerAdapter(
                         id = model.id,
                         modelName = model.modelName,
                         isFavourite = true,
+                        description = model.description,
                         modelUrl = model.modelUrl,
-                        photoUri = model.photoUri
+                        photo = model.photo
                     )
                     updateFavourite(mModel)
                     Singleton.isFavouriteFlag.value = true
@@ -82,7 +86,6 @@ class RecyclerAdapter(
         }
 
         private fun updateFavourite(mModel: Model) = GlobalScope.launch {
-            Log.e("MYCHECK", mModel.toString())
             modelDao?.updateModel(mModel)
         }
     }
