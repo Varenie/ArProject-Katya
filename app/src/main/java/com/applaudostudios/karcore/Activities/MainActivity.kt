@@ -14,6 +14,7 @@ import com.applaudostudios.karcore.DataBase.Dao.ModelDao
 import com.applaudostudios.karcore.DataBase.Entities.Model
 import com.applaudostudios.karcore.R
 import com.applaudostudios.karcore.Singleton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         setDB()
         setObservables()
+        setListeners()
     }
 
     private fun setObservables(){
@@ -43,6 +45,14 @@ class MainActivity : AppCompatActivity() {
         Singleton.isFavouriteFlag.observe(this) {
             getValueForList()
             setRecycler()
+        }
+    }
+
+    private fun setListeners() {
+        val fabFavourite = findViewById<FloatingActionButton>(R.id.fab_favourites)
+
+        fabFavourite.setOnClickListener{
+            getFavouriteModelsForList()
         }
     }
 
@@ -67,6 +77,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun getValueForList() = GlobalScope.launch{
         Singleton.modelList.postValue(modelDao?.getModels())
+    }
+
+    private fun getFavouriteModelsForList() = GlobalScope.launch{
+        Singleton.modelList.postValue(modelDao?.getFavouriteModels())
     }
 
 }

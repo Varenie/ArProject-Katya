@@ -31,6 +31,7 @@ class RecyclerAdapter(
         val name = itemView.findViewById<TextView>(R.id.tv_model_name)
         val desc = itemView.findViewById<TextView>(R.id.tv_model_derscription)
         val favourite = itemView.findViewById<ImageView>(R.id.iv_like)
+        val delete = itemView.findViewById<ImageView>(R.id.iv_delete)
 
         init {
             itemView.setOnLongClickListener {
@@ -65,7 +66,6 @@ class RecyclerAdapter(
                         photo = model.photo
                     )
                     updateFavourite(mModel)
-                    Singleton.isFavouriteFlag.value = false
                     favourite.setImageResource(R.drawable.ic_favorite_border)
 
                 } else {
@@ -78,15 +78,23 @@ class RecyclerAdapter(
                         photo = model.photo
                     )
                     updateFavourite(mModel)
-                    Singleton.isFavouriteFlag.value = true
                     favourite.setImageResource(R.drawable.ic_favorite_fill)
 
                 }
+                Singleton.isFavouriteFlag.value = !model.isFavourite
+            }
+
+            delete.setOnClickListener {
+                deleteModel(model)
             }
         }
 
-        private fun updateFavourite(mModel: Model) = GlobalScope.launch {
-            modelDao?.updateModel(mModel)
+        private fun updateFavourite(model: Model) = GlobalScope.launch {
+            modelDao?.updateModel(model)
+        }
+
+        private fun deleteModel(model: Model) = GlobalScope.launch {
+            modelDao?.deleteModel(model)
         }
     }
 
