@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.applaudostudios.karcore.DataBase.AppDatabase
@@ -76,9 +77,20 @@ class HelloActivity : AppCompatActivity() {
         val etName = myWindow.findViewById<EditText>(R.id.et_name)
         val etDescription = myWindow.findViewById<EditText>(R.id.et_description)
 
+        when {
+            etLink.text.isNullOrBlank() -> {
+                Toast.makeText(this, "Ссылка не добавлена", Toast.LENGTH_SHORT).show()
+                return
+            }
+            etName.text.isNullOrBlank() -> {
+                Toast.makeText(this, "Имя не добавлено", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
         val modelUrl = etLink.text.toString()
         val modelName = etName.text.toString()
         val modelDescription = etDescription.text.toString()
+
 
 
         val bm = BitmapFactory.decodeResource(resources, R.drawable.lamp_thumb)

@@ -66,7 +66,6 @@ class RecyclerAdapter(
                         photo = model.photo
                     )
                     updateFavourite(mModel)
-                    favourite.setImageResource(R.drawable.ic_favorite_border)
 
                 } else {
                     val mModel = Model(
@@ -78,7 +77,6 @@ class RecyclerAdapter(
                         photo = model.photo
                     )
                     updateFavourite(mModel)
-                    favourite.setImageResource(R.drawable.ic_favorite_fill)
 
                 }
                 Singleton.isFavouriteFlag.value = !model.isFavourite
@@ -86,6 +84,7 @@ class RecyclerAdapter(
 
             delete.setOnClickListener {
                 deleteModel(model)
+                Singleton.isDeleteFlag.value = !Singleton.isDeleteFlag.value!!
             }
         }
 

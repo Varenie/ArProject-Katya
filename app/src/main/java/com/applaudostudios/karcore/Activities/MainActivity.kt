@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,17 +44,36 @@ class MainActivity : AppCompatActivity() {
         }
 
         Singleton.isFavouriteFlag.observe(this) {
+            Thread.sleep(100)
             getValueForList()
-            setRecycler()
+        }
+
+        Singleton.isDeleteFlag.observe(this) {
+            Thread.sleep(100)
+            getValueForList()
         }
     }
 
     private fun setListeners() {
         val fabFavourite = findViewById<FloatingActionButton>(R.id.fab_favourites)
+        val searchView = findViewById<SearchView>(R.id.searchView)
 
         fabFavourite.setOnClickListener{
             getFavouriteModelsForList()
         }
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    getModelByName(it)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return false
+            }
+        })
     }
 
     private fun setDB() = GlobalScope.launch {
@@ -81,6 +101,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFavouriteModelsForList() = GlobalScope.launch{
         Singleton.modelList.postValue(modelDao?.getFavouriteModels())
+    }
+
+    private fun getModelByName(name: String) = GlobalScope.launch {
+        Singleton.modelList.postValue(modelDao?.getModelByName(name))
     }
 
 }

@@ -15,6 +15,9 @@ interface ModelDao {
     @Delete
     fun deleteModel(model: Model)
 
+    @Query("SELECT * FROM Model WHERE model_name = :name")
+    fun getModelByName(name: String): List<Model>
+
     @Query("SELECT * FROM Model")
     fun getModels(): List<Model>
 
